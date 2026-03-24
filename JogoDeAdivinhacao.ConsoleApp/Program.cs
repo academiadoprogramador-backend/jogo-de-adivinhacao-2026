@@ -23,6 +23,17 @@
 
         O jogador deve ser informado caso o número que está tentando adivinhar
         já tenha sido informado anteriormente na mesma rodada.
+
+        
+    3. Implemente uma funcionalidade de Pontuação, onde:
+
+        O jogador começa com uma pontuação máxima, por exemplo, 1000 pontos.
+        A pontuação é calculada com base na proximidade do palpite em relação ao número secreto.
+
+        A cada tentativa errada, o jogador perde pontos de acordo com a distância do número secreto:
+            Se a diferença entre o número secreto e o palpite for de 10 ou mais, o jogador perde 100 pontos.
+            Se a diferença for entre 5 e 9, o jogador perde 50 pontos.
+            Se a diferença for entre 1 e 4, o jogador perde 20 pontos.
 */
 
 // array
@@ -48,7 +59,7 @@ while (jogoDeveContinuar == true)
     int numeroAleatorio;
     int tentativasMaximas;
 
-    switch (dificuldadeEscolhida) // operador do switch
+    switch (dificuldadeEscolhida)
     {
         case "1":
             numeroAleatorio = RandomNumberGenerator.GetInt32(1, 21);
@@ -73,10 +84,11 @@ while (jogoDeveContinuar == true)
             continue;
     }
 
+    int pontuacao = 1000;
+
     int[] numerosDigitados = new int[tentativasMaximas];
     int contadorNumerosDigitados = 0;
 
-    // enquanto a tentativa atual for menor que a qtd de tentativas máximas
     for (int tentativaAtual = 1; tentativaAtual <= tentativasMaximas; tentativaAtual++)
     {
         Console.Clear();
@@ -89,7 +101,6 @@ while (jogoDeveContinuar == true)
         Console.Write("Digite um número: ");
         int numeroDigitado = Convert.ToInt32(Console.ReadLine());
 
-        // comparar com outros números já na memória
         bool numeroEstaRepetido = false;
 
         for (int indiceAtual = 0; indiceAtual < numerosDigitados.Length; indiceAtual++)
@@ -114,7 +125,6 @@ while (jogoDeveContinuar == true)
             continue;
         }
 
-        // guardar o número na memória
         if (contadorNumerosDigitados < numerosDigitados.Length)
         {
             numerosDigitados[contadorNumerosDigitados] = numeroDigitado;
@@ -143,6 +153,23 @@ while (jogoDeveContinuar == true)
             Console.WriteLine("O número digitado foi menor que o número secreto!");
         }
 
+        int diferencaNumerica = Math.Abs(numeroAleatorio - numeroDigitado); // 90 - 100 = 10
+
+        if (diferencaNumerica >= 10)
+        {
+            pontuacao -= 100;
+        }
+        else if (diferencaNumerica >= 5)
+        {
+            pontuacao -= 50;
+        }
+        else
+        {
+            pontuacao -= 20;
+        }
+
+        Console.WriteLine("-----------------------------------------------");
+        Console.WriteLine("Sua pontuação é: " + pontuacao);
         Console.WriteLine("-----------------------------------------------");
         Console.Write("Digite ENTER para continuar...");
         Console.ReadLine();
